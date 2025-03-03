@@ -1,6 +1,88 @@
 version: "3.8"
 
 services:
+  commonapi:
+    build:
+      context: ../../Common-API
+      dockerfile: Dockerfile
+    container_name: commonapi-container
+    ports:
+      - "8083:8083" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
+  
+  identityapimain:
+    build:
+      context: ../../Identity-API
+      dockerfile: Dockerfile
+    container_name: identityapimain-container
+    ports:
+      - "8094:8094" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
+
+  identityapiprofile:
+    build:
+      context: ../../Identity-API
+      dockerfile: Docker8095/Dockerfile
+    container_name: identityapiprofile-container
+    ports:
+      - "8095:8095" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
+
+  tmapi:
+    build:
+      context: ../../TM-API
+      dockerfile: Dockerfile
+    container_name: tmapi-container
+    ports:
+      - "8089:8089" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
+  adminapi:
+    build:
+      context: ../../Admin-API
+      dockerfile: Dockerfile
+    container_name: adminapi-container
+    ports:
+      - "8082:8082" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
+
+  fhirapi:
+    build:
+      context: ../../FHIR-API
+      dockerfile: Dockerfile
+    container_name: fhirapi-container
+    ports:
+      - "8093:8093" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
   # MySQL Database service
   mysql:
     image: mysql:8.0.34

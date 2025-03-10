@@ -29,19 +29,33 @@ services:
     networks:
       - app-network
 
-  # identityapiprofile:
-  #   build:
-  #     context: ../../Identity-API
-  #     dockerfile: Docker8095/Dockerfile
-  #   container_name: identityapiprofile-container
-  #   ports:
-  #     - "8095:8095" 
-  #   depends_on:
-  #     - mysql
-  #     - redis
-  #     - mongodb
-  #   networks:
-  #     - app-network
+  identityapiprofile:
+    build:
+      context: ../../Identity-API
+      dockerfile: Docker8095/Dockerfile
+    container_name: identityapiprofile-container
+    ports:
+      - "8095:8095" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
+
+  benapi:
+    build:
+      context: ../../BeneficiaryID-Generation-API
+      dockerfile: Dockerfile
+    container_name: benapi-container
+    ports:
+      - "8092:8092" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
 
   tmapi:
     build:
@@ -63,6 +77,20 @@ services:
     container_name: adminapi-container
     ports:
       - "8082:8082" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network
+
+  schedulerapi:
+    build:
+      context: ../../Scheduler-API
+      dockerfile: Dockerfile
+    container_name: schedulerapi-container
+    ports:
+      - "8088:8088" 
     depends_on:
       - mysql
       - redis

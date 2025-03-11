@@ -70,6 +70,7 @@ services:
       - mongodb
     networks:
       - app-network
+
   adminapi:
     build:
       context: ../../Admin-API
@@ -104,11 +105,14 @@ services:
       dockerfile: Dockerfile
     container_name: amritdb-container
     ports:
-      - "8080:8080" 
+      - "8999:8999" 
     depends_on:
-      - mysql
-      - redis
-      - mongodb
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mongodb:
+        condition: service_started
     networks:
       - app-network
 
@@ -139,6 +143,11 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql # Mounting the init.sql script in order to create 4 databases.
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p1234"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
 
   # Redis Cache service
   redis:

@@ -115,7 +115,7 @@ services:
         condition: service_started
     networks:
       - app-network
-
+      
   fhirapi:
     build:
       context: ../../FHIR-API
@@ -129,6 +129,21 @@ services:
       - mongodb
     networks:
       - app-network
+
+  ecdapi:
+    build:
+      context: ../../ECD-API
+      dockerfile: Dockerfile
+    container_name: ecdapi-container
+    ports:
+      - "8084:8084" 
+    depends_on:
+      - mysql
+      - redis
+      - mongodb
+    networks:
+      - app-network  
+  
   # MySQL Database service
   mysql:
     image: mysql:8.0.34
